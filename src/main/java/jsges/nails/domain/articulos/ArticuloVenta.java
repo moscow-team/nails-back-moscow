@@ -13,7 +13,6 @@ import lombok.ToString;
 @ToString
 public class ArticuloVenta {
 
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer id;
@@ -28,9 +27,7 @@ public class ArticuloVenta {
         @ManyToOne(cascade = CascadeType.ALL)
         private Linea linea;
 
-
         public void asEliminado() {
-               this.setEstado(1);
+                this.setEstado(1);
         }
 }
-

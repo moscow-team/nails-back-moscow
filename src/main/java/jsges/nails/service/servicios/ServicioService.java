@@ -1,54 +1,80 @@
 package jsges.nails.service.servicios;
-import jsges.nails.DTO.articulos.ArticuloVentaDTO;
 import jsges.nails.DTO.servicios.ServicioDTO;
-import jsges.nails.domain.articulos.ArticuloVenta;
-import jsges.nails.domain.servicios.ItemServicio;
+import jsges.nails.domain.organizacion.Cliente;
 import jsges.nails.domain.servicios.Servicio;
+import jsges.nails.mappers.services.ServiceMapper;
 import jsges.nails.repository.servicios.ServicioRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jsges.nails.service.organizacion.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServicioService implements IServicioService {
 
     @Autowired
     private ServicioRepository modelRepository;
-    private static final Logger logger = LoggerFactory.getLogger(ServicioService.class);
+    private IClienteService clienteService;
 
     @Override
-    public List<Servicio> listar() {
-        return modelRepository.buscarNoEliminados();
+    public ResponseEntity<List<ServicioDTO>> listarNoEliminados() {
+        List<Servicio> servicios = modelRepository.buscarNoEliminados();
+
+        if (servicios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(servicios.stream().map(ServiceMapper::toDTO).collect(Collectors.toList()));
     }
 
     @Override
-    public Servicio buscarPorId(Integer id) {
-        return modelRepository.findById(id).orElse(null);
+    public ResponseEntity<ServicioDTO> buscarPorId(Integer id) {
+        Servicio servicio = modelRepository.findById(id).orElse(null);
+
+        if (servicio == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(ServiceMapper.toDTO(servicio));
     }
 
     @Override
-    public Servicio guardar(Servicio model) {
-        return modelRepository.save(model);
+    public ResponseEntity<ServicioDTO> guardar(ServicioDTO model) {
+        Cliente cliente = clienteService.buscarPorId(model.cliente);
+
+        if (cliente == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Servicio servicio = modelRepository.save(ServiceMapper.toEntity(model, cliente));
+
+        return ResponseEntity.ok(ServiceMapper.toDTO(servicio));    
     }
 
 
     @Override
-    public Page<Servicio> getServicios(Pageable pageable) {
-        return  modelRepository.findAll(pageable);
+    public ResponseEntity<Page<ServicioDTO>> listarServicios(Pageable pageable) {
+        Page<Servicio> servicios = modelRepository.findAll(pageable);
+
+        if (servicios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(servicios.map(ServiceMapper::toDTO));
     }
 
 
 
     @Override
-    public Page<ServicioDTO> findPaginated(Pageable pageable, List<ServicioDTO> listado) {
+    public ResponseEntity<Page<ServicioDTO>> buscarPagina(Pageable pageable, List<ServicioDTO> listado) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
@@ -63,13 +89,17 @@ public class ServicioService implements IServicioService {
         Page<ServicioDTO> bookPage
                 = new PageImpl<ServicioDTO>(list, PageRequest.of(currentPage, pageSize), listado.size());
 
-        return bookPage;
+        return ResponseEntity.ok(bookPage);
     }
 
     @Override
-    public List<Servicio> listar(String consulta) {
-        //logger.info("service " +consulta);
-        return modelRepository.buscarNoEliminados(consulta);
-    }
+    public ResponseEntity<List<ServicioDTO>> listarNoEliminados(String consulta) {
+        List<Servicio> servicios = modelRepository.buscarNoEliminados(consulta);
 
+        if (servicios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(servicios.stream().map(ServiceMapper::toDTO).collect(Collectors.toList()));
+    }
 }

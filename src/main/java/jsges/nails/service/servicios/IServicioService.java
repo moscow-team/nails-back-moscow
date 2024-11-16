@@ -1,27 +1,22 @@
 package jsges.nails.service.servicios;
 
 import jsges.nails.DTO.servicios.ServicioDTO;
-import jsges.nails.DTO.servicios.TipoServicioDTO;
-import jsges.nails.domain.articulos.ArticuloVenta;
-import jsges.nails.domain.servicios.ItemServicio;
-import jsges.nails.domain.servicios.Servicio;
-import jsges.nails.domain.servicios.TipoServicio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IServicioService {
-    public List<Servicio> listar();
+    public ResponseEntity<List<ServicioDTO>> listarNoEliminados();
 
-    public Servicio buscarPorId(Integer id);
+    public ResponseEntity<ServicioDTO> buscarPorId(Integer id);
 
-    public Servicio guardar(Servicio model);
+    public ResponseEntity<ServicioDTO> guardar(ServicioDTO model);
 
-    public Page<ServicioDTO> findPaginated(Pageable pageable,List<ServicioDTO> servicios);
+    public ResponseEntity<Page<ServicioDTO>> buscarPagina(Pageable pageable, List<ServicioDTO> servicios);
 
-    public Page<Servicio> getServicios(Pageable pageable);
+    public ResponseEntity<Page<ServicioDTO>> listarServicios(Pageable pageable);
 
-    public List<Servicio> listar(String consulta);
-
+    public ResponseEntity<List<ServicioDTO>> listarNoEliminados(String consulta);
 }

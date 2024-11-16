@@ -1,91 +1,112 @@
 package jsges.nails.service.servicios;
 import jsges.nails.DTO.servicios.TipoServicioDTO;
 import jsges.nails.domain.servicios.TipoServicio;
+import jsges.nails.mappers.services.TipoServicioMapper;
 import jsges.nails.repository.servicios.TipoServicioRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TipoServicioService implements ITipoServicioService {
 
     @Autowired
     private TipoServicioRepository modelRepository;
-    private static final Logger logger = LoggerFactory.getLogger(TipoServicioService.class);
 
     @Override
-    public List<TipoServicio> listar() {
-        return modelRepository.buscarNoEliminados();
-    }
+    public ResponseEntity<List<TipoServicioDTO>> listarNoEliminados() {
+        List<TipoServicio> tipos = modelRepository.buscarNoEliminados();
 
-    @Override
-    public TipoServicio buscarPorId(Integer id) {
-        return modelRepository.findById(id).orElse(null);
-    }
-
-
-
-    @Override
-    public TipoServicio guardar(TipoServicio model) {
-        return modelRepository.save(model);
-    }
-
-
-    @Override
-    public TipoServicio newModel(TipoServicioDTO modelDTO) {
-        TipoServicio model =  new TipoServicio();
-        model.setDenominacion(modelDTO.denominacion);
-        return guardar(model);
-    }
-
-
-    @Override
-    public void eliminar(TipoServicio model) {
-
-        modelRepository.save(model);
-    }
-
-    @Override
-    public List<TipoServicio> listar(String consulta) {
-        //logger.info("service " +consulta);
-        return modelRepository.buscarNoEliminados(consulta);
-    }
-
-    @Override
-    public Page<TipoServicio> getTiposServicios(Pageable pageable) {
-        return  modelRepository.findAll(pageable);
-    }
-
-    public List<TipoServicio> buscar(String consulta) {
-        return modelRepository.buscarExacto(consulta);
-    }
-
-
-    @Override
-    public Page<TipoServicio> findPaginated(Pageable pageable, List<TipoServicio>lineas) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<TipoServicio> list;
-        if (lineas.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, lineas.size());
-            list = lineas.subList(startItem, toIndex);
+        if (tipos.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-        Page<TipoServicio> bookPage
-                = new PageImpl<TipoServicio>(list, PageRequest.of(currentPage, pageSize), lineas.size());
-
-        return bookPage;
+        return ResponseEntity.ok(tipos.stream().map(TipoServicioMapper::toDTO).collect(Collectors.toList()));
     }
 
+    @Override
+    public ResponseEntity<TipoServicioDTO> buscarPorId(Integer id) {
+        TipoServicio tipoServicio = modelRepository.findById(id).orElse(null);
+
+        if (tipoServicio == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(TipoServicioMapper.toDTO(tipoServicio));
+    }
+
+
+
+    @Override
+    public ResponseEntity<TipoServicioDTO> guardar(TipoServicioDTO model) {
+        TipoServicio tipoServicio = modelRepository.save(TipoServicioMapper.toEntity(model));
+
+        return ResponseEntity.ok(TipoServicioMapper.toDTO(tipoServicio));
+    }
+
+
+    @Override
+    public ResponseEntity<TipoServicioDTO> eliminar(Integer id) {
+        TipoServicio tipoServicio = modelRepository.findById(id).orElse(null);
+
+        if (tipoServicio == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        tipoServicio.asEliminado();
+        modelRepository.save(tipoServicio);
+
+        return ResponseEntity.ok(TipoServicioMapper.toDTO(tipoServicio));
+    }
+
+    @Override
+    public ResponseEntity<List<TipoServicioDTO>> listarNoEliminados(String consulta) {
+        List<TipoServicio> tipoServicios = modelRepository.buscarNoEliminados(consulta);
+
+        if (tipoServicios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(tipoServicios.stream().map(TipoServicioMapper::toDTO).collect(Collectors.toList()));
+    }
+
+    @Override
+    public ResponseEntity<Page<TipoServicioDTO>> getTiposServicios(Pageable pageable) {
+        Page<TipoServicio> tiposServicios = modelRepository.findAll(pageable);
+
+        if (tiposServicios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(tiposServicios.map(TipoServicioMapper::toDTO));
+    }
+
+    @Override
+    public ResponseEntity<Page<TipoServicioDTO>> buscarPagina(Pageable pageable, List<TipoServicioDTO>lineas) {
+        List<TipoServicio> tiposServicios = lineas.stream().map(TipoServicioMapper::toEntity).collect(Collectors.toList());
+        Page<TipoServicio> tiposServiciosPage = new PageImpl<>(tiposServicios, pageable, tiposServicios.size());
+
+        return ResponseEntity.ok(tiposServiciosPage.map(TipoServicioMapper::toDTO));        
+    }
+
+    @Override
+    public ResponseEntity<TipoServicioDTO> actualizar(TipoServicioDTO model) {
+        TipoServicio tipoServicio = modelRepository.findById(model.id).orElse(null);
+
+        if (tipoServicio == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        tipoServicio.setDenominacion(model.denominacion);
+
+        modelRepository.save(tipoServicio);
+
+        return ResponseEntity.ok(TipoServicioMapper.toDTO(tipoServicio));
+    }
 }

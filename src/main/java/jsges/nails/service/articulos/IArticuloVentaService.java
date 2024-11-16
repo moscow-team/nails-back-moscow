@@ -1,25 +1,27 @@
 package jsges.nails.service.articulos;
 
 import jsges.nails.DTO.articulos.ArticuloVentaDTO;
-import jsges.nails.domain.articulos.ArticuloVenta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IArticuloVentaService {
 
-    public List<ArticuloVenta> listar();
+    public ResponseEntity<List<ArticuloVentaDTO>> listarNoEliminados();
 
-    public ArticuloVenta buscarPorId(Integer id);
+    public ResponseEntity<ArticuloVentaDTO> buscarPorId(Integer id);
 
-    public ArticuloVenta guardar(ArticuloVenta model);
+    public ResponseEntity<ArticuloVentaDTO> guardar(ArticuloVentaDTO model);
 
-    public void eliminar(ArticuloVenta model);
+    public ResponseEntity<ArticuloVentaDTO> eliminar(int id);
 
-    public List<ArticuloVenta> listar(String consulta);
+    public ResponseEntity<List<ArticuloVentaDTO>> listarNoEliminados(String consulta);
 
-    public Page<ArticuloVenta> getArticulos(Pageable pageable);
+    public ResponseEntity<Page<ArticuloVentaDTO>> listarPaginado(Pageable pageable);
 
-    public Page<ArticuloVentaDTO> findPaginated(Pageable pageable, List<ArticuloVentaDTO> list);
+    public ResponseEntity<Page<ArticuloVentaDTO>> buscarPagina(Pageable pageable, List<ArticuloVentaDTO> list);
+
+    public ResponseEntity<ArticuloVentaDTO> actualizar(ArticuloVentaDTO model, Integer id);
 }

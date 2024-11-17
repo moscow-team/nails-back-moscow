@@ -1,24 +1,26 @@
 package jsges.nails.service.organizacion;
 
 import jsges.nails.DTO.Organizacion.ClienteDTO;
-import jsges.nails.domain.organizacion.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IClienteService {
-    public List<Cliente> listar();
+    public ResponseEntity<List<ClienteDTO>> listar();
 
-    public Cliente buscarPorId(Integer id);
+    public ResponseEntity<ClienteDTO> buscarPorId(Integer id);
 
-    public Cliente guardar(Cliente cliente);
+    public ResponseEntity<ClienteDTO> guardar(ClienteDTO cliente);
 
-    public void eliminar(Cliente cliente);
+    public ResponseEntity<ClienteDTO> eliminar(Integer id);
 
-      public List<Cliente> listar(String consulta);
+    public ResponseEntity<List<ClienteDTO>> listar(String consulta);
 
-    public Page<Cliente> getClientes(Pageable pageable);
+    public ResponseEntity<Page<ClienteDTO>> listarClientes(Pageable pageable);
 
-    public Page<ClienteDTO> findPaginated(Pageable pageable, List<ClienteDTO> clientes);
-}
+    public ResponseEntity<Page<ClienteDTO>> buscarPaginado(Pageable pageable, List<ClienteDTO> clientes);
+
+    public ResponseEntity<ClienteDTO> actualizar(Integer id, ClienteDTO modelRecibido);
+  }

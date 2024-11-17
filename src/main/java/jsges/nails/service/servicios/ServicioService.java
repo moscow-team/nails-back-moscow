@@ -2,6 +2,7 @@ package jsges.nails.service.servicios;
 import jsges.nails.DTO.servicios.ServicioDTO;
 import jsges.nails.domain.organizacion.Cliente;
 import jsges.nails.domain.servicios.Servicio;
+import jsges.nails.mappers.ClienteMapper;
 import jsges.nails.mappers.services.ServiceMapper;
 import jsges.nails.repository.servicios.ServicioRepository;
 import jsges.nails.service.organizacion.IClienteService;
@@ -48,7 +49,7 @@ public class ServicioService implements IServicioService {
 
     @Override
     public ResponseEntity<ServicioDTO> guardar(ServicioDTO model) {
-        Cliente cliente = clienteService.buscarPorId(model.cliente);
+        Cliente cliente = ClienteMapper.toEntity(clienteService.buscarPorId(model.cliente).getBody());
 
         if (cliente == null) {
             return ResponseEntity.badRequest().build();

@@ -23,6 +23,7 @@ public class ServicioService implements IServicioService {
 
     @Autowired
     private ServicioRepository modelRepository;
+    @Autowired
     private IClienteService clienteService;
 
     @Override
@@ -50,7 +51,6 @@ public class ServicioService implements IServicioService {
     @Override
     public ResponseEntity<ServicioDTO> guardar(ServicioDTO model) {
         Cliente cliente = ClienteMapper.toEntity(clienteService.buscarPorId(model.cliente).getBody());
-
         if (cliente == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -59,7 +59,6 @@ public class ServicioService implements IServicioService {
 
         return ResponseEntity.ok(ServiceMapper.toDTO(servicio));    
     }
-
 
     @Override
     public ResponseEntity<Page<ServicioDTO>> listarServicios(Pageable pageable) {
@@ -71,8 +70,6 @@ public class ServicioService implements IServicioService {
 
         return ResponseEntity.ok(servicios.map(ServiceMapper::toDTO));
     }
-
-
 
     @Override
     public ResponseEntity<Page<ServicioDTO>> buscarPagina(Pageable pageable, List<ServicioDTO> listado) {

@@ -42,7 +42,7 @@ public class TipoServicioController {
     }
 
 
-    @PutMapping("/tipoServicioEliminar/{id}")
+    @DeleteMapping("/tipoServicioEliminar/{id}")
     public ResponseEntity<TipoServicioDTO> eliminar(@PathVariable Integer id){
         return modelService.eliminar(id);
     }

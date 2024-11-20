@@ -2,7 +2,9 @@ package jsges.nails.DTO.articulos;
 
 import jsges.nails.DTO.TipoObjetoDTO;
 import jsges.nails.domain.articulos.ArticuloVenta;
+import lombok.Data;
 
+@Data
 public class ArticuloVentaDTO extends TipoObjetoDTO {
 
     // TODO: Agregar las validaciones con decoradores + el @Valid en el controlador

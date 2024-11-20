@@ -45,7 +45,7 @@ public class ArticuloVentaService implements IArticuloVentaService {
         Linea linea = lineaService.buscarEntidadPorId(model.linea);
 
         if (linea == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
 
         ArticuloVenta newModel = ArticuloMapper.toEntity(model, linea);
@@ -115,7 +115,7 @@ public class ArticuloVentaService implements IArticuloVentaService {
         Linea linea = lineaService.buscarEntidadPorId(model.linea);
 
         if (linea == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
 
         ArticuloVenta modelParaActualizar = ArticuloMapper.toEntity(model, linea);

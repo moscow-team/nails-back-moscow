@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import jsges.nails.DTO.servicios.TipoServicioDTO;
 import jsges.nails.domain.servicios.TipoServicio;
-import jsges.nails.mappers.services.TipoServicioMapper;
 import jsges.nails.repository.servicios.TipoServicioRepository;
 import jsges.nails.service.servicios.TipoServicioService;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<List<TipoServicioDTO>> response = tipoServicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados();
     }
@@ -58,7 +57,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<List<TipoServicioDTO>> response = tipoServicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     // Test para buscarPorId
@@ -69,7 +68,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         verify(modelRepository, times(1)).findById(1);
     }
@@ -81,7 +80,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     // Test para guardar
@@ -96,7 +95,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.guardar(tipoServicioDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         verify(modelRepository, times(1)).save(any(TipoServicio.class));
     }
@@ -109,7 +108,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.eliminar(1);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(modelRepository, times(1)).findById(1);
         verify(modelRepository, times(1)).save(tipoServicio);
     }
@@ -121,7 +120,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.eliminar(1);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     // Test para listarNoEliminados con consulta
@@ -132,7 +131,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<List<TipoServicioDTO>> response = tipoServicioService.listarNoEliminados("consulta");
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados("consulta");
     }
@@ -144,7 +143,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<List<TipoServicioDTO>> response = tipoServicioService.listarNoEliminados("consulta");
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     // Test para getTiposServicios (paginación)
@@ -157,7 +156,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<Page<TipoServicioDTO>> response = tipoServicioService.getTiposServicios(PageRequest.of(0, 10));
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
         verify(modelRepository, times(1)).findAll(any(Pageable.class));
     }
@@ -171,7 +170,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<Page<TipoServicioDTO>> response = tipoServicioService.getTiposServicios(PageRequest.of(0, 10));
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     // Test para actualizar
@@ -187,7 +186,7 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.actualizar(tipoServicioDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals("Servicio Actualizado", response.getBody().getDenominacion());
         verify(modelRepository, times(1)).findById(1);
         verify(modelRepository, times(1)).save(any(TipoServicio.class));
@@ -204,6 +203,6 @@ public class TipoServicioServiceTest {
         ResponseEntity<TipoServicioDTO> response = tipoServicioService.actualizar(tipoServicioDTO);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 }

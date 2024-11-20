@@ -58,7 +58,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados();
     }
@@ -78,14 +78,13 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         verify(modelRepository, times(1)).findById(1);
     }
 
     @Test
     public void testGuardar() {
-        Cliente cliente = new Cliente();
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setId(1);
 
@@ -102,7 +101,7 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.guardar(servicioDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
 
         verify(clienteService, times(1)).buscarPorId(1);
@@ -116,7 +115,7 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.guardar(servicioDTO);
 
         assertNotNull(response);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(400, response.getStatusCode());
         verify(clienteService, times(1)).buscarPorId(1);
     }
 
@@ -136,7 +135,7 @@ public class ServicioServiceTest {
         ResponseEntity<Page<ServicioDTO>> response = servicioService.listarServicios(PageRequest.of(0, 10));
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
         verify(modelRepository, times(1)).findAll(PageRequest.of(0, 10));
     }
@@ -152,7 +151,7 @@ public class ServicioServiceTest {
         ResponseEntity<Page<ServicioDTO>> response = servicioService.buscarPagina(PageRequest.of(0, 10), servicios);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
     }
 
@@ -172,7 +171,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados("consulta");
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados("consulta");
     }
@@ -184,7 +183,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 
     @Test
@@ -194,6 +193,6 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
     }
 }

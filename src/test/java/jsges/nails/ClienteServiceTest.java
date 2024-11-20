@@ -42,7 +42,7 @@ public class ClienteServiceTest {
         ResponseEntity<List<ClienteDTO>> response = clienteService.listar();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(clienteRepository, times(1)).buscarNoEliminados();
     }
@@ -56,7 +56,7 @@ public class ClienteServiceTest {
         ResponseEntity<List<ClienteDTO>> response = clienteService.listar(consulta);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(clienteRepository, times(1)).buscarNoEliminados(consulta);
     }
@@ -70,7 +70,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.buscarPorId(id);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
     }
 
@@ -82,7 +82,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.buscarPorId(id);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
     }
 
@@ -95,7 +95,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.guardar(clienteDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
 
@@ -108,7 +108,7 @@ public class ClienteServiceTest {
         ResponseEntity<Page<ClienteDTO>> response = clienteService.listarClientes(pageable);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
         verify(clienteRepository, times(1)).findAll(pageable);
     }
@@ -123,7 +123,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.eliminar(id);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
         verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
@@ -136,7 +136,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.eliminar(id);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
     }
 
@@ -147,7 +147,7 @@ public class ClienteServiceTest {
         ResponseEntity<Page<ClienteDTO>> response = clienteService.buscarPaginado(pageable, clientes);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
     }
 
@@ -164,7 +164,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.actualizar(id, clienteDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
         verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
@@ -178,7 +178,7 @@ public class ClienteServiceTest {
         ResponseEntity<ClienteDTO> response = clienteService.actualizar(id, clienteDTO);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
         verify(clienteRepository, times(1)).findById(id);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<List<ArticuloVentaDTO>> response = articuloVentaService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados();
     }
@@ -74,7 +75,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.buscarPorId(id);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(modelRepository, times(1)).findById(id);
     }
 
@@ -86,7 +87,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.buscarPorId(id);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(modelRepository, times(1)).findById(id);
     }
 
@@ -107,7 +108,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.guardar(articuloDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(lineaService, times(1)).buscarEntidadPorId(articuloDTO.getLinea());
         verify(modelRepository, times(1)).save(any(ArticuloVenta.class));
     }
@@ -122,7 +123,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.guardar(articuloDTO);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
         verify(lineaService, times(1)).buscarEntidadPorId(articuloDTO.getLinea());
         verify(modelRepository, times(0)).save(any(ArticuloVenta.class));
     }
@@ -142,7 +143,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.eliminar(id);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(modelRepository, times(1)).findById(id);
         verify(modelRepository, times(1)).save(articulo);
     }
@@ -155,7 +156,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.eliminar(id);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode());
         verify(modelRepository, times(1)).findById(id);
         verify(modelRepository, times(0)).save(any(ArticuloVenta.class));
     }
@@ -180,7 +181,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.actualizar(articuloDTO, id);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         verify(modelRepository, times(1)).findById(id);
         verify(lineaService, times(1)).buscarEntidadPorId(articuloDTO.getLinea());
         verify(modelRepository, times(1)).save(any(ArticuloVenta.class));
@@ -198,7 +199,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<ArticuloVentaDTO> response = articuloVentaService.actualizar(articuloDTO, id);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCodeValue());  // Debería devolver un 404 si el artículo no existe
+        assertEquals(404, response.getStatusCode());  // Debería devolver un 404 si el artículo no existe
         verify(modelRepository, times(1)).findById(id);  // Verificamos que se haya buscado el artículo
         verify(lineaService, times(0)).buscarEntidadPorId(anyInt());  // No debe llamar a buscarEntidadPorId si el artículo no existe
         verify(modelRepository, times(0)).save(any(ArticuloVenta.class));  // No debe intentar guardar nada si el artículo no existe
@@ -221,7 +222,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<Page<ArticuloVentaDTO>> response = articuloVentaService.listarPaginado(pageable);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
         verify(modelRepository, times(1)).findAll(pageable);
     }
@@ -238,7 +239,7 @@ public class ArticuloVentaServiceTest {
         ResponseEntity<Page<ArticuloVentaDTO>> response = articuloVentaService.buscarPagina(pageable, listado);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode());
         assertEquals(2, response.getBody().getContent().size()); // 2 elementos en la primer pagina
         assertEquals(3, response.getBody().getTotalElements()); // 3 elementos en total
         assertEquals(2, response.getBody().getTotalPages()); // 2 paginas en total

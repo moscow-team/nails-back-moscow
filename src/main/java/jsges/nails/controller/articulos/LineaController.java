@@ -40,7 +40,7 @@ public class LineaController {
         return modelService.guardar(model);
     }
 
-    @PutMapping("/lineaEliminar/{id}")
+    @DeleteMapping("/lineaEliminar/{id}")
     public ResponseEntity<LineaDTO> eliminar(@PathVariable Integer id) {
         return modelService.eliminar(id);
     }

@@ -1,7 +1,9 @@
 package jsges.nails.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public abstract class ObjetoEliminable {
     public final int ESTADO_ACTIVO = 0;
     public final int ESTADO_ELIMINADO = 1;

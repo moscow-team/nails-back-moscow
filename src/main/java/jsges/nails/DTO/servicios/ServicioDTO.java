@@ -2,11 +2,14 @@ package jsges.nails.DTO.servicios;
 
 import jsges.nails.domain.servicios.ItemServicio;
 import jsges.nails.domain.servicios.Servicio;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
 public class ServicioDTO{
     public Integer id;
     public Integer cliente;

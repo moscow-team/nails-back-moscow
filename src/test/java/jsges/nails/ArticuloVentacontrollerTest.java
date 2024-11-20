@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class ArticuloVentacontrollerTest {
 
         // Paso 4: Verificar el resultado
         assertNotNull(response, "La respuesta no debe ser nula");
-        assertEquals(200, response.getStatusCode(), "El código de estado debe ser 200");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "El código de estado debe ser 200");
         assertEquals(mockList, response.getBody(), "El cuerpo de la respuesta debe contener la lista simulada.");
 
         // Paso 5: Verificar que el servicio fue invocado una vez
@@ -69,7 +70,7 @@ public class ArticuloVentacontrollerTest {
 
         // Paso 3: Verificar resultados
         assertNotNull(response, "La respuesta no debe ser nula");
-        assertEquals(200, response.getStatusCode(), "El código de estado debe ser 200");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "El código de estado debe ser 200");
         assertEquals(nuevoArticulo, response.getBody(), "El cuerpo de la respuesta debe contener el artículo agregado");
 
         // Paso 4: Verificar que el servicio fue invocado correctamente
@@ -91,7 +92,7 @@ public class ArticuloVentacontrollerTest {
 
         // Paso 3: Verificar resultados
         assertNotNull(response, "La respuesta no debe ser nula");
-        assertEquals(200, response.getStatusCode(), "El código de estado debe ser 200");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "El código de estado debe ser 200");
         assertEquals(articuloEliminado, response.getBody(), "El cuerpo de la respuesta debe contener el artículo eliminado");
 
         // Paso 4: Verificar interacción con el mock
@@ -115,7 +116,7 @@ public class ArticuloVentacontrollerTest {
 
         // Paso 3: Verificar resultados
         assertNotNull(response, "La respuesta no debe ser nula");
-        assertEquals(200, response.getStatusCode(), "El código de estado debe ser 200");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "El código de estado debe ser 200");
         assertEquals(articuloActualizado, response.getBody(), "El cuerpo de la respuesta debe contener el artículo actualizado");
 
         // Paso 4: Verificar interacción con el mock

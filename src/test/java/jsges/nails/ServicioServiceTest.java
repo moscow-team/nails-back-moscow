@@ -1,5 +1,6 @@
 package jsges.nails;
 
+import com.mysql.cj.xdevapi.Client;
 import jsges.nails.DTO.Organizacion.ClienteDTO;
 import jsges.nails.DTO.servicios.ServicioDTO;
 import jsges.nails.domain.organizacion.Cliente;
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -40,6 +42,10 @@ public class ServicioServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        servicioDTO = new ServicioDTO();
+        servicioDTO.setCliente(1);
+        servicioDTO.setFechaDocumento(LocalDateTime.now());
     }
 
     @Test
@@ -58,7 +64,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados();
     }
@@ -78,7 +84,7 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
         verify(modelRepository, times(1)).findById(1);
     }
@@ -91,17 +97,23 @@ public class ServicioServiceTest {
         when(clienteService.buscarPorId(1)).thenReturn(ResponseEntity.ok(clienteDTO));
 
         ServicioDTO servicioDTO = new ServicioDTO();
-        servicioDTO.setFechaDocumento(LocalDateTime.now());
+        servicioDTO.setCliente(1);
+        servicioDTO.setFechaDocumento(LocalDateTime.now().plusDays(1));
+        servicioDTO.setTotal(100.0);
+
+        Cliente cliente = new Cliente();
+        cliente.setId(1);
 
         Servicio servicio = new Servicio();
         servicio.setId(1);
+        servicio.setCliente(cliente);
 
         when(modelRepository.save(any(Servicio.class))).thenReturn(servicio);
 
         ResponseEntity<ServicioDTO> response = servicioService.guardar(servicioDTO);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().getId());
 
         verify(clienteService, times(1)).buscarPorId(1);
@@ -115,7 +127,7 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.guardar(servicioDTO);
 
         assertNotNull(response);
-        assertEquals(400, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         verify(clienteService, times(1)).buscarPorId(1);
     }
 
@@ -135,7 +147,7 @@ public class ServicioServiceTest {
         ResponseEntity<Page<ServicioDTO>> response = servicioService.listarServicios(PageRequest.of(0, 10));
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
         verify(modelRepository, times(1)).findAll(PageRequest.of(0, 10));
     }
@@ -151,7 +163,7 @@ public class ServicioServiceTest {
         ResponseEntity<Page<ServicioDTO>> response = servicioService.buscarPagina(PageRequest.of(0, 10), servicios);
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().getContent().size());
     }
 
@@ -171,7 +183,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados("consulta");
 
         assertNotNull(response);
-        assertEquals(200, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(modelRepository, times(1)).buscarNoEliminados("consulta");
     }
@@ -183,7 +195,7 @@ public class ServicioServiceTest {
         ResponseEntity<List<ServicioDTO>> response = servicioService.listarNoEliminados();
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -193,6 +205,6 @@ public class ServicioServiceTest {
         ResponseEntity<ServicioDTO> response = servicioService.buscarPorId(1);
 
         assertNotNull(response);
-        assertEquals(404, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }

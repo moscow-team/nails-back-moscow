@@ -58,7 +58,7 @@ public class ArticuloVentaControllerIntegrationTest {
 
     @Test
     void testEliminarNotFound() throws Exception {
-        int idArticulo = 1;
+        int idArticulo = 9999; // Articulo con ID que no existe
 
         // Simular una solicitud DELETE
         mockMvc.perform(delete("/nails/articuloEliminar/{id}", idArticulo)
